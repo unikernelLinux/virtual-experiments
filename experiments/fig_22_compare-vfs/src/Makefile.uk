@@ -1,4 +1,0 @@
-$(eval $(call addlib_s,appshfstest,$(CONFIG_APPSHFSTEST)))
-
-APPSHFSTEST_SRCS-y += $(APPSHFSTEST_BASE)/main.c
-APPSHFSTEST_SRCS-y += $(APPSHFSTEST_BASE)/shfscmd.c

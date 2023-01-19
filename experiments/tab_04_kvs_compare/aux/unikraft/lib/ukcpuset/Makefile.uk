@@ -1,3 +1,0 @@
-$(eval $(call addlib_s,libukcpuset,$(CONFIG_LIBUKCPUSET)))
-
-CINCLUDES-$(CONFIG_LIBUKCPUSET) +=-I$(LIBUKCPUSET_BASE)/include

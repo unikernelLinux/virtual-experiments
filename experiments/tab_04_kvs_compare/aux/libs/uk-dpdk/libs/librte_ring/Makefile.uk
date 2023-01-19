@@ -1,3 +1,0 @@
-$(eval $(call adddpdklib,$(DPDK_SRC_BASE),librte_ring))
-
-SRCS-y += rte_mempool_ring.c
