@@ -6,6 +6,7 @@
 mkdir rawdata results
 
 # run benchmarks
+./impl/ukl-qemu-redis.sh
 ./impl/hermitux-uhyve-redis.sh
 ./impl/rump-qemu-redis.sh
 ./impl/osv-qemu-redis.sh

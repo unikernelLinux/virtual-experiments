@@ -14,6 +14,12 @@ rm -rf $IMAGES
 mkdir -p $IMAGES
 
 # ========================================================================
+# Generate UKL VM Images
+# ========================================================================
+
+build_ukl
+
+# ========================================================================
 # Generate Unikraft VM images
 # ========================================================================
 
@@ -28,27 +34,12 @@ LUPINEDIR=${BUILDDIR}/.lupine
 build_lupine
 
 KERNELS="${LUPINEDIR}/Lupine-Linux/kernelbuild/"
-# uncompressed version for firecracker
-LUPINE_FC_KPATH="${KERNELS}/lupine-djw-kml++redis/vmlinux"
-GENERIC_FC_KPATH="${KERNELS}/microvm++redis/vmlinux"
 # compressed one for QEMU
 LUPINE_KVM_KPATH="${KERNELS}/lupine-djw-kml-qemu++redis/vmlinuz-4.0.0-kml"
 GENERIC_KVM_KPATH="${KERNELS}/microvm++redis/vmlinuz-4.0.0"
 
-FIRECRACKER_PATH=.firecracker
-if [ ! -f "$LUPINE_FC_KPATH" ]; then
-	echo "Lupine not built, something is wrong"
-	exit 1
-fi
-
-cp $LUPINE_FC_KPATH ${IMAGES}/lupine-fc.kernel
-cp $GENERIC_FC_KPATH ${IMAGES}/generic-fc.kernel
 cp $LUPINE_KVM_KPATH ${IMAGES}/lupine-qemu.kernel
 cp $GENERIC_KVM_KPATH ${IMAGES}/generic-qemu.kernel
-
-if [ ! -f "$FIRECRACKER_PATH" ]; then
-	ln -s ${LUPINEDIR}/Lupine-Linux/firecracker $FIRECRACKER_PATH
-fi
 
 pushd ${LUPINEDIR}/Lupine-Linux/
 # various patches...

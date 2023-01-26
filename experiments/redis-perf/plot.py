@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 # Authors: Alexander Jung <alexander.jung@neclab.eu>
-#s
+#
 
 import os
 import csv
@@ -52,7 +52,9 @@ def plot(data=None, output=None):
     'microvm-fc': 'Linux FC',
     'native-redis': 'Linux Native',
     'lupine-fc': 'Lupine FC',
-    'lupine-qemu': 'Lupine KVM'
+    'lupine-qemu': 'Lupine KVM',
+    'ukl-byp-qemu': 'UKL Bypass KVM',
+    'ukl-sc-qemu': 'UKL Shortcut KVM'
   }
 
   for f in os.listdir(RESULTSDIR):
@@ -61,10 +63,10 @@ def plot(data=None, output=None):
 
       if unikernel not in stats:
         stats[unikernel] = {}
-      
+
       with open(os.path.join(RESULTSDIR, f), 'r') as csvfile:
         csvdata = csv.reader(csvfile, delimiter="\t")
-        
+
         next(csvdata) # skip header
 
         operations = {}
@@ -72,9 +74,9 @@ def plot(data=None, output=None):
         for row in csvdata:
           if row[0] not in operations:
             operations[row[0]] = []
-          
+
           operations[row[0]].append(float(row[1])/1000.0)
-        
+
         for operation in operations:
           all_ops = np.array(operations[operation])
           operations[operation] = {
@@ -126,7 +128,9 @@ def plot(data=None, output=None):
     'docker',
     'osv-qemu',
     'native-redis',
-    'unikraft-qemu']:
+    'unikraft-qemu',
+    'ukl-byp',
+    'ukl-sc']:
     xlabels.append(labels[unikernel])
     operations = stats[unikernel]
 
@@ -154,7 +158,7 @@ def plot(data=None, output=None):
         color=bar_colors[operation_label],
         linewidth=.5
       )
-      
+
       ax1.text(i + 1 + bar_offset, operations[operation_label][AMAX_KEY] + 0.2, round(operations[operation_label][MEAN_KEY], 2),
         ha='center',
         va='bottom',

@@ -2,6 +2,32 @@
 
 BUILDDIR=../
 LUPINEDIR=${BUILDDIR}/.lupine
+UKLDIR=${BUILDDIR}/.ukl
+
+build_ukl() {
+	mkdir -p ${UKLDIR}
+
+	if [ ! -d ${UKLDIR}/ukl ]; then
+		pushd ${UKLDIR}
+		git clone https://github.com/unikernelLinux/ukl
+		pushd ukl
+		git submodule update --init
+		popd
+		popd
+
+	fi
+
+	docker pull fedora:36
+	CONTAINER=ukl-builder
+	docker stop $CONTAINER
+	docker rm -f $CONTAINER
+	ABSUKL=`readlink -f ${UKLDIR}`
+	docker run --rm --privileged --name=${CONTAINER} -v ${ABSUKL}:/src -v ${IMAGES}:/kernels -dit fedora:36 /bin/bash
+	docker cp ../common/build-ukl.sh ${CONTAINER}:/
+	docker exec -it $CONTAINER /build-ukl.sh
+
+	docker stop $CONTAINER
+}
 
 build_lupine() {
     mkdir -p ${LUPINEDIR}
