@@ -180,34 +180,3 @@ cp ${IMAGES}/rump/root/rumprun-packages/redis/bin/redis-server.img \
 		${IMAGES}/rump-qemu.img
 cp ${IMAGES}/rump/root/rumprun-packages/redis/images/data.iso ${IMAGES}/rump-qemu.iso
 chmod u+x ${IMAGES}/rump/root/rumprun/app-tools/rumprun
-
-# ========================================================================
-# Generate Hermitux VM image
-# ========================================================================
-
-CONTAINER=hermitux-tmp
-docker pull olivierpierre/hermitux
-docker run --rm --privileged --name=$CONTAINER \
-			--cpuset-cpus="${CPU1}-${CPU4}" \
-			-v $(pwd)/data:/data-imported \
-			-dt olivierpierre/hermitux
-docker exec -it $CONTAINER bash -c \
-		 "cd /root/hermitux/apps/redis-2.0.4 && make"
-mkdir -p ${IMAGES}/hermitux/
-docker cp ${CONTAINER}:/root/hermitux/apps/redis-2.0.4/redis-server \
-	${IMAGES}/hermitux/
-docker cp ${CONTAINER}:/root/hermitux/apps/redis-2.0.4/redis.conf \
-	${IMAGES}/hermitux/
-docker cp ${CONTAINER}:/root/hermitux/apps/redis-2.0.4/.minifs \
-	${IMAGES}/hermitux/
-docker cp ${CONTAINER}:/root/hermitux/hermitux-kernel/prefix/x86_64-hermit/extra/tests/hermitux \
-	${IMAGES}/hermitux/hermitux.kernel
-docker cp ${CONTAINER}:/root/hermitux/hermitux-kernel/prefix/bin/proxy \
-		${IMAGES}/hermitux/uhyve
-docker container stop $CONTAINER
-docker rm -f $CONTAINER
-
-sed -i -e "s/loglevel verbose/loglevel notice/" ${IMAGES}/hermitux/redis.conf
-sed -i -e "s/timeout 300/timeout 0/" ${IMAGES}/hermitux/redis.conf
-sed -i -e "s/END/maxclients 0/" ${IMAGES}/hermitux/redis.conf
-echo "END" >> ${IMAGES}/hermitux/redis.conf
