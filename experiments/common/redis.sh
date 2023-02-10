@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[[ -z "${REPS}" ]] && REPS=100000
+[[ -z "${REPS}" ]] && REPS=1000000
 #[[ -z "${CONCURRENT_CONNS}" ]] && CONCURRENT_CONNS=10
 [[ -z "${CONCURRENT_CONNS}" ]] && CONCURRENT_CONNS=30
 #[[ -z "${PAYLOAD_SIZE}" ]] && PAYLOAD_SIZE=2
