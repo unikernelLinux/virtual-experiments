@@ -44,7 +44,6 @@ def plot(data=None, output=None):
 
   labels = {
     'unikraft-qemu': 'Unikraft KVM',
-    'osv-qemu': 'OSv KVM',
     'microvm-qemu': 'Linux KVM',
     'lupine-qemu': 'Lupine KVM',
     'ukl-byp-qemu': 'UKL Bypass KVM',
@@ -115,10 +114,9 @@ def plot(data=None, output=None):
   for unikernel in [
     'microvm-qemu',
     'lupine-qemu',
-    'osv-qemu',
     'unikraft-qemu',
-    'ukl-byp',
-    'ukl-sc']:
+    'ukl-byp-qemu',
+    'ukl-sc-qemu']:
     xlabels.append(labels[unikernel])
     operations = stats[unikernel]
 
