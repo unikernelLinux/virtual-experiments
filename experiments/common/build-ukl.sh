@@ -19,7 +19,7 @@ git reset --hard HEAD
 popd
 
 # build the standard redis
-git reset --hard origin/master
+git reset --hard HEAD
 autoreconf -i
 ./configure --with-program=redis --enable-bypass --enable-use-ret
 make -j`nproc` vmlinuz
