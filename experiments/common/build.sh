@@ -14,7 +14,15 @@ build_ukl() {
 		git submodule update --init
 		popd
 		popd
-
+	else
+		pushd ${UKLDIR}/ukl
+		pushd linux
+		git checkout ukl-main-5.14
+		git reset --hard HEAD
+		popd
+		git reset --hard HEAD
+		make distclean
+		popd
 	fi
 
 	docker pull fedora:36
