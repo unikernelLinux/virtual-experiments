@@ -38,18 +38,18 @@ do
 	taskset -c ${CPU1} qemu-guest \
 		-i data/redis.cpio \
 		-k ${IMAGES}/unikraft+mimalloc.kernel \
-		-a "/redis.conf" -m 1024 -p ${CPU2} \
+		-a "netdev.ipv4_addr=${BASEIP}.2 netdev.ipv4_gw_addr=${BASEIP}.1 netdev.ipv4_subnet_mask=255.255.255.0 -- /redis.conf" -m 1024 -p ${CPU2} \
 		-b ${NETIF} -x
 
 	# make sure that the server has properly started
 	sleep 8
 
-	ip=`cat $(pwd)/dnsmasq.log | \
-		grep "dnsmasq-dhcp: DHCPACK(${NETIF})" | \
-		tail -n 1 | awk  '{print $3}'`
+	#ip=`cat $(pwd)/dnsmasq.log | \
+		#grep "dnsmasq-dhcp: DHCPACK(${NETIF})" | \
+		#tail -n 1 | awk  '{print $3}'`
 
 	# benchmark
-	benchmark_redis_server ${ip} 6379
+	benchmark_redis_server ${BASEIP}.2 6379
 
 	parse_redis_results $LOG $RESULTS
 

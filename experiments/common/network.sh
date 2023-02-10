@@ -10,8 +10,9 @@ BASEIP=172.190.0
 function run_dhcp {
     dnsmasq -d \
         --log-queries \
-        --bind-dynamic \
         --interface=$1 \
+	--conf-file=/dev/null \
+	--bind-dynamic \
         --listen-addr=${2}.1 \
         --dhcp-range=${2}.2,${2}.254,255.255.255.0,12h &> $(pwd)/dnsmasq.log &
     echo $!
