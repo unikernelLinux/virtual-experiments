@@ -22,6 +22,7 @@ build_ukl() {
 		popd
 		git reset --hard HEAD
 		make distclean
+		rm -rf glibc-build libgcc-build
 		popd
 	fi
 

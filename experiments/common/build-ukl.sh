@@ -31,7 +31,7 @@ pushd linux
 git checkout ukl-main-5.14-sc
 popd
 pushd redis
-rm stamp-redis-dir
+rm -rf stamp-redis-dir redis
 make stamp-redis-dir
 pushd redis # not a typo, we have ukl/redis/redis now that stamp-redis-dir is complete
 git checkout redis-ukl-sc
