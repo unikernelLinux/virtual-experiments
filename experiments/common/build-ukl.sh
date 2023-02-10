@@ -12,12 +12,21 @@ pushd /src/ukl
 # Modern git won't let us interact with the repo as root when it is likely owned by a user
 git config --global safe.directory '*'
 
+#reset to a pristine state
+pushd linux
+git checkout ukl-main-5.14
+git reset --hard HEAD
+popd
+
+# build the standard redis
+git reset --hard origin/master
 autoreconf -i
 ./configure --with-program=redis --enable-bypass --enable-use-ret
 make -j`nproc` vmlinuz
-cp vmlinuz /kernels/vmlinuz.ukl-byp
-
+mv vmlinuz /kernels/vmlinuz.ukl-byp
 make clean
+
+#Now build the deep shortcut
 pushd linux
 git checkout ukl-main-5.14-sc
 popd
