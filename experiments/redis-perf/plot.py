@@ -38,20 +38,14 @@ def plot(data=None, output=None):
   throughput_max = 0 # maximum observed throughput
   total_apps = 0
   bar_colors = {
-    'GET': '#FFF6F9',
-    'SET': '#5697C4',
+    'GET': 'blue',
+    'SET': 'orange',
   }
 
   labels = {
     'unikraft-qemu': 'Unikraft KVM',
-    'docker': 'Docker Native',
-    'hermitux-uhyve': 'Hermitux uHyve',
     'osv-qemu': 'OSv KVM',
-    'rump-qemu': 'Rump KVM',
     'microvm-qemu': 'Linux KVM',
-    'microvm-fc': 'Linux FC',
-    'native-redis': 'Linux Native',
-    'lupine-fc': 'Lupine FC',
     'lupine-qemu': 'Lupine KVM',
     'ukl-byp-qemu': 'UKL Bypass KVM',
     'ukl-sc-qemu': 'UKL Shortcut KVM'
@@ -119,15 +113,9 @@ def plot(data=None, output=None):
   i = 0
   line_offset = 0
   for unikernel in [
-    'hermitux-uhyve',
-    'microvm-fc',
-    'lupine-fc',
-    'rump-qemu',
     'microvm-qemu',
     'lupine-qemu',
-    'docker',
     'osv-qemu',
-    'native-redis',
     'unikraft-qemu',
     'ukl-byp',
     'ukl-sc']:
