@@ -26,15 +26,16 @@ function cleanup {
 
 trap "cleanup" EXIT
 
-for UKL_CONFIG in "byp" "sc"
+for UKL_CONFIG in "sc" "byp"
 do
-	LOG=rawdata/ukl-${UKL_CONFIG}-qemu-redis.txt
 	RESULTS=results/ukl-${UKL_CONFIG}-qemu.csv
 	echo "operation	throughput" > $RESULTS
-	touch $LOG
 
-	for j in {1..5}
+	for j in {1..10}
 	do
+		LOGGET=rawdata/ukl-${UKL_CONFIG}-qemu-redis-get-${j}.json
+		LOGSET=rawdata/ukl-${UKL_CONFIG}-qemu-redis-set-${j}.json
+
 		taskset -c ${CPU1} qemu-guest \
 			-k ${IMAGES}/vmlinuz.ukl-${UKL_CONFIG} \
 			-i ${IMAGES}/ukl-initrd.cpio.xz \
@@ -48,7 +49,7 @@ do
 		# benchmark
 		benchmark_redis_server ${BASEIP}.2 6379
 
-		parse_redis_results $LOG $RESULTS
+		parse_redis_results $LOGGET $LOGSET $RESULTS
 
 		# stop server
 		killall -9 qemu-system-x86
