@@ -28,13 +28,14 @@ function cleanup {
 
 trap "cleanup" EXIT
 
-LOG=rawdata/unikraft-qemu-redis.txt
 RESULTS=results/unikraft-qemu.csv
 echo "operation	throughput" > $RESULTS
-touch $LOG
 
-for j in {1..5}
+for j in {1..10}
 do
+	LOG=rawdata/unikraft-qemu-redis-${j}.txt
+	touch $LOG
+
 	taskset -c ${CPU1} qemu-guest \
 		-i data/redis.cpio \
 		-k ${IMAGES}/unikraft+mimalloc.kernel \

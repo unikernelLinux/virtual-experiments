@@ -4,11 +4,9 @@
 set -x
 
 NETIF=tux0
-LOG=rawdata/lupine-qemu-redis.txt
 RESULTS=results/lupine-qemu.csv
 echo "operation	throughput" > $RESULTS
 mkdir -p rawdata
-touch $LOG
 
 IMAGES=$(pwd)/images
 
@@ -31,8 +29,11 @@ function cleanup {
 
 trap "cleanup" EXIT
 
-for j in {1..5}
+for j in {1..10}
 do
+	LOG=rawdata/lupine-qemu-redis-${j}.txt
+	touch $LOG
+
 	cp ${IMAGES}/redis.ext2 ${IMAGES}/redis.ext2.disposible
 
 	taskset -c ${CPU1} qemu-guest \

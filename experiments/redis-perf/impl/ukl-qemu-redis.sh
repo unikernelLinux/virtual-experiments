@@ -28,13 +28,14 @@ trap "cleanup" EXIT
 
 for UKL_CONFIG in "byp" "sc"
 do
-	LOG=rawdata/ukl-${UKL_CONFIG}-qemu-redis.txt
 	RESULTS=results/ukl-${UKL_CONFIG}-qemu.csv
 	echo "operation	throughput" > $RESULTS
-	touch $LOG
 
-	for j in {1..5}
+	for j in {1..10}
 	do
+		LOG=rawdata/ukl-${UKL_CONFIG}-qemu-redis-${j}.txt
+		touch $LOG
+
 		taskset -c ${CPU1} qemu-guest \
 			-k ${IMAGES}/vmlinuz.ukl-${UKL_CONFIG} \
 			-i ${IMAGES}/ukl-initrd.cpio.xz \

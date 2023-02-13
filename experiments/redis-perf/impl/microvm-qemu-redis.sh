@@ -10,11 +10,9 @@ source ../common/redis.sh
 IMAGES=$(pwd)/images
 
 NETIF=tux0
-LOG=rawdata/microvm-qemu-redis.txt
 RESULTS=results/microvm-qemu.csv
 echo "operation	throughput" > $RESULTS
 mkdir -p rawdata
-touch $LOG
 
 create_bridge $NETIF $BASEIP
 killall -9 qemu-system-x86
@@ -31,8 +29,11 @@ function cleanup {
 
 trap "cleanup" EXIT
 
-for j in {1..5}
+for j in {1..10}
 do
+	LOG=rawdata/microvm-qemu-redis-${j}.txt
+	touch $LOG
+
 	cp ${IMAGES}/redis.ext2 ${IMAGES}/redis.ext2.disposible
 
 	taskset -c ${CPU1} qemu-guest \
