@@ -4,9 +4,11 @@
 set -x
 
 NETIF=tux0
+LOG=rawdata/lupine-qemu-redis.txt
 RESULTS=results/lupine-qemu.csv
 echo "operation	throughput" > $RESULTS
 mkdir -p rawdata
+touch $LOG
 
 IMAGES=$(pwd)/images
 
@@ -29,11 +31,8 @@ function cleanup {
 
 trap "cleanup" EXIT
 
-for j in {1..10}
+for j in {1..5}
 do
-	LOGGET=rawdata/lupine-qemu-redis-get-${j}.txt
-	LOGSET=rawdata/lupine-qemu-redis-set-${j}.txt
-
 	cp ${IMAGES}/redis.ext2 ${IMAGES}/redis.ext2.disposible
 
 	taskset -c ${CPU1} qemu-guest \
@@ -49,7 +48,7 @@ do
 	# benchmark
 	benchmark_redis_server ${BASEIP}.2 6379
 
-	parse_redis_results $LOGGET $LOGSET $RESULTS
+	parse_redis_results $LOG $RESULTS
 
 	# stop server
 	killall -9 qemu-system-x86

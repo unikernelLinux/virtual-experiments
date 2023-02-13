@@ -10,9 +10,11 @@ source ../common/redis.sh
 IMAGES=$(pwd)/images
 
 NETIF=tux0
+LOG=rawdata/microvm-qemu-redis.txt
 RESULTS=results/microvm-qemu.csv
 echo "operation	throughput" > $RESULTS
 mkdir -p rawdata
+touch $LOG
 
 create_bridge $NETIF $BASEIP
 killall -9 qemu-system-x86
@@ -29,11 +31,8 @@ function cleanup {
 
 trap "cleanup" EXIT
 
-for j in {1..10}
+for j in {1..5}
 do
-	LOGGET=rawdata/microvm-qemu-redis-get-${j}.json
-	LOGSET=rawdata/microvm-qemu-redis-set-${j}.json
-
 	cp ${IMAGES}/redis.ext2 ${IMAGES}/redis.ext2.disposible
 
 	taskset -c ${CPU1} qemu-guest \
@@ -49,7 +48,7 @@ do
 	# benchmark
 	benchmark_redis_server ${BASEIP}.2 6379
 
-	parse_redis_results $LOGGET $LOGSET $RESULTS
+	parse_redis_results $LOG $RESULTS
 
 	# stop server
 	killall -9 qemu-system-x86
